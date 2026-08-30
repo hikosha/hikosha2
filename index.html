@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <title>第2回ヒコシャメデル写真展「Ao」</title>
+  <style>
+    :root {
+      --ao: #1f3a5f;
+      --fuchi: #2f9e8f;
+      --dark: #1c2b36;
+      --cream: #f2f6f8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Hiragino Sans", "Yu Gothic", sans-serif;
+      background: var(--cream);
+      color: var(--dark);
+    }
+    header, footer {
+      background: linear-gradient(90deg, var(--ao), var(--fuchi));
+      height: 44px;
+      overflow: hidden;
+    }
+    .logo-row {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: nowrap;
+      gap: 10px;
+    }
+    .logo-row img {
+      height: 28px;
+      width: auto;
+      display: block;
+      flex-shrink: 0;
+    }
+    .home img { width: 100%; display: block; }
+    .site-title {
+      text-align: center;
+      padding: 28px 16px;
+      background: var(--dark);
+      color: #fff;
+    }
+    .site-title h1,
+    .site-title .venue {
+      margin: 0;
+      font-size: 1.1rem;
+      font-weight: normal;
+      letter-spacing: 0.03em;
+      line-height: 1.9;
+      color: #fff;
+    }
+    .click {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      padding: 20px 12px;
+      background: #fff;
+    }
+    .click button {
+      border: none;
+      background: var(--ao);
+      color: #fff;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+    .row-break { grid-column: 1 / -1; height: 0; margin: 0; padding: 0; }
+    .main {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 30px 16px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .main.visible { opacity: 1; transform: translateY(0); }
+    .main h1 {
+      font-size: 1.2rem;
+      border-left: 6px solid var(--ao);
+      padding-left: 10px;
+      margin-bottom: 16px;
+    }
+    .work-block { margin-bottom: 36px; }
+    .work-block img {
+      display: block;
+      max-width: 100%;
+      max-height: min(608px, calc(100vw - 32px));
+      width: auto;
+      height: auto;
+      margin: 0 auto 12px;
+      border-radius: 6px;
+    }
+    .huruta-content { font-size: 0.9rem; line-height: 1.7; }
+    .line { display: flex; margin-bottom: 4px; }
+    .line .title { width: 88px; color: var(--fuchi); font-weight: bold; flex-shrink: 0; white-space: nowrap; }
+    .line .koron { width: 14px; flex-shrink: 0; }
+    .line .content { flex: 1; }
+    .line p { margin: 0; }
+    .line .content p { white-space: pre-line; }
+    .archive-tabs {
+      max-width: 640px;
+      margin: 32px auto 20px;
+      padding: 0 16px;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+    .archive-tabs a {
+      flex: 1;
+      max-width: 240px;
+      display: flex;
+      flex-wrap: nowrap;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      text-align: center;
+      background: var(--fuchi);
+      color: #fff;
+      padding: 10px 8px;
+      border-radius: 8px;
+      text-decoration: none;
+      line-height: 1.4;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .archive-tabs a .sub,
+    .archive-tabs a .main-label {
+      font-size: 0.72rem;
+      font-weight: bold;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+
+    #topBtn {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: none;
+      background: var(--dark);
+      color: #fff;
+      font-size: 1.3rem;
+      line-height: 48px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      z-index: 100;
+    }
+    #topBtn.show { opacity: 1; pointer-events: auto; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo-row">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+      </div>
+  </header>
+
+  <div class="site-title">
+    <h1>第2回ヒコシャメデル写真展<br>「Ao」</h1>
+    <p class="venue">
+      富士フォトギャラリー銀座 スペース2<br>
+      2025/9/19(金) - 2025/9/25(木)
+    </p>
+  </div>
+
+  <div class="home">
+    <img src="https://lh3.googleusercontent.com/d/1eORAOUU2ZucWIMA9TkZqybcPtFFPX4cx" alt="キービジュアル">
+  </div>
+
+  <div class="click">
+      <button class="jump-btn" data-target="target1">塚原 徹</button>
+      <button class="jump-btn" data-target="target2">小沼 成彦</button>
+      <button class="jump-btn" data-target="target3">高橋 忠延</button>
+      <button class="jump-btn" data-target="target4">田中 雪乃</button>
+      <button class="jump-btn" data-target="target5">川田 晃志</button>
+      <button class="jump-btn" data-target="target6">洲家 岳人</button>
+      <button class="jump-btn" data-target="target7">深谷 美和子</button>
+      <button class="jump-btn" data-target="target8">里村 幸昭</button>
+      <button class="jump-btn" data-target="target9">築島 好古</button>
+      <button class="jump-btn" data-target="target10">渡部 将大</button>
+      <button class="jump-btn" data-target="target11">原田 涼太郎</button>
+      <button class="jump-btn" data-target="target12">井上 昌一</button>
+      <button class="jump-btn" data-target="target13">島田 康司</button>
+      <button class="jump-btn" data-target="target14">後藤 大輝</button>
+      <button class="jump-btn" data-target="target15">岡田 雅典</button>
+      <button class="jump-btn" data-target="target16">松尾 省吾</button>
+      <div class="row-break"></div>
+      <button class="jump-btn" data-target="target17">作村 俊弘</button>
+      <button class="jump-btn" data-target="target18">木村 紀雄</button>
+      <button class="jump-btn" data-target="target19">古田 佑一</button>
+  </div>
+
+    <div class="main visible">
+    <div class="target" id="target1"></div>
+    <h1>塚原 徹</h1>
+        <div class="work-block">
+          <img src="https://lh3.googleusercontent.com/d/1uAySG8wStIGnhJ6cEGXmjCQIfTR0-pYZ" alt="羽田空港二丁目西交差点">
+          <div class="huruta-content">
+            <div class="line"><div class="title"><p>タイトル</p></div><div class="koron"><p>:</p></div><div class="content"><p>羽田空港二丁目西交差点</p></div></div>
+            <div class="line"><div class="title"><p>撮影地</p></div><div class="koron"><p>:</p></div><div class="content"><p>羽田空港</p></div></div>
+            <div class="line"><div class="title"><p>カメラ</p></div><div class="koron"><p>:</p></div><div class="content"><p>Nikon Z8</p></div></div>
+            <div class="line"><div class="title"><p>レンズ</p></div><div class="koron"><p>:</p></div><div class="content"><p>Tokina AT-X 16-28 F2.8 PRO FX</p></div></div>
+            <div class="line"><div class="title"><p>設定</p></div><div class="koron"><p>:</p></div><div class="content"><p>SS1/20 f/3.2 ISO 200</p></div></div>
+            <div class="line"><div class="title"><p>コメント</p></div><div class="koron"><p>:</p></div><div class="content"><p>12月夕方、羽田の「Ao」<br>飛行機を感じる光景として受け止めて頂ければ嬉しいです。</p></div></div>
+          </div>
+        </div>
+  </div>
+  <div class="main visible">
+    <div class="target" id="target2"></div>
+    <h1>小沼 成彦</h1>
+        <div class="work-block">
+          <img src="https://lh3.googleusercontent.com/d/1yFzkSjjn_c1rPDCSsdOLRZRj8AifAqFy" alt="California Blue">
+          <div class="huruta-content">
+            <div class="line"><div class="title"><p>タイトル</p></div><div class="koron"><p>:</p></div><div class="content"><p>California Blue</p></div></div>
+            <div class="line"><div class="title"><p>撮影地</p></div><div class="koron"><p>:</p></div><div class="content"><p>ロサンゼルス国際空港</p></div></div>
+            <div class="line"><div class="title"><p>カメラ</p></div><div class="koron"><p>:</p></div><div class="content"><p>Nikon D500</p></div></div>
+            <div class="line"><div class="title"><p>レンズ</p></div><div class="koron"><p>:</p></div><div class="content"><p>AF-P DX NIKKOR 10-20mm f/4.5-5.6G VR</p></div></div>
+            <div class="line"><div class="title"><p>設定</p></div><div class="koron"><p>:</p></div><div class="content"><p>SS1/1250 f/8.0 ISO 400</p></div></div>
+            <div class="line"><div class="title"><p>コメント</p></div><div class="koron"><p>:</p></div><div class="content"><p>日本を飛び立って遥か海の向こう、異国の地に降り立つシーンを捉えた。<br>乗客はこの瞬間に何を思っていただろうか。<br>ANAの「あお」と空の「あお」。<br>王道の「あお」で表現してみた。</p></div></div>
+          </div>
+        </div>
+  </div>
+  <div class="main visible">
+    <div class="target" id="target3"></div>
+    <h1>高橋 忠延</h1>
+        <div class="work-block">
+          <img src="https://lh3.googleusercontent.com/d/1mwpJMzW1Es6OCswZSrP0zZijTWo7DAHY" alt="blue jeans &amp; triton blue">
+          <div class="huruta-content">
+            <div class="line"><div class="title"><p>タイトル</p></div><div class="koron"><p>:</p></div><div class="content"><p>blue jeans &amp; triton blue</p></div></div>
+            <div class="line"><div class="title"><p>撮影地</p></div><div class="koron"><p>:</p></div><div class="content"><p>羽田空港</p></div></div>
+            <div class="line"><div class="title"><p>カメラ</p></div><div class="koron"><p>:</p></div><div class="content"><p>EOS 5D Mark IV</p></div></div>
+            <div class="line"><div class="title"><p>レンズ</p></div><div class="koron"><p>:</p></div><div class="content"><p>EF100-400mm F4.5-5.6L IS II USM</p></div></div>
+            <div class="line"><div class="title"><p>設定</p></div><div class="koron"><p>:</p></div><div class="content"><p>SS1/200 f/5.0 ISO 400</p></div></div>
+            <div class="line"><div class="title"><p>コメント</p></div><div class="koron"><p>:</p></div><div class="content"><p>羽田空港を外周から見渡せる京浜島。<br>都心ルートから着陸する飛行機が良く見える場所です。<br>そして、彼女の眼差しの先にはトリトンブルーの機体が映っていることでしょう。</p></div></div>
+          </div>
+        </div>
+  </div>
+  <div class="main visible">
+    <div class="target" id="target4"></div>
+    <h1>田中 雪乃</h1>
+        <div class="work-block">
+          <img src="https://lh3.googleusercontent.com/d/1ISrSAJTysW6pZzYnu3NnET9JgKFYI55s" alt="青春のはじまり">
+          <div class="huruta-content">
+            <div class="line"><div class="title"><p>タイトル</p></div><div class="koron"><p>:</p></div><div class="content"><p>青春のはじまり</p></div></div>
+            <div class="line"><div class="title"><p>撮影地</p></div><div class="koron"><p>:</p></div><div class="content"><p>羽田空港</p></div></div>
+            <div class="line"><div class="title"><p>カメラ</p></div><div class="koron"><p>:</p></div><div class="content"><p>EOS R6 Mark II</p></div></div>
+            <div class="line"><div class="title"><p>レンズ</p></div><div class="koron"><p>:</p></div><div class="content"><p>RF24-105mm F4 L IS USM</p></div></div>
+            <div class="line"><div class="title"><p>設定</p></div><div class="koron"><p>:</p></div><div class="content"><p>SS1/800 f/6.3 ISO 500</p></div></div>
+            <div class="line"><div class="title"><p>コメント</p></div><div class="koron"><p>:</p></div><div class="content"><p>飛行機に向かって思いきり手を振る少女の姿に、ふと昔の自分を重ねていました。<br>夢中になれるものがあること——<br>それだけで、人は青春の中にいるのだと思います。<br>自由だった、あの頃。<br>あの気持ちを、今も忘れずにいたい。<br>そう思わせてくれた瞬間でした。</p></div></div>
+          </div>
+        </div>
+  </div>
+  <div class="main visible">
+    <div class="target" id="target5"></div>
+    <h1>川田 晃志</h1>
+        <div class="work-block">
+          <img src="https://lh3.googleusercontent.com/d/1parhtZIYFraSUEAiR1oUnoj9oxFDIWja" alt="凍てつくハス田">
+          <div class="huruta-content">
+            <div class="line"><div class="title"><p>タイトル</p></div><div class="koron"><p>:</p></div><div class="content"><p>凍てつくハス田</p></div></div>
+            <div class="line"><div class="title"><p>撮影地</p></div><div class="koron"><p>:</p></div><div class="content"><p>成田空港周辺</p></div></div>
+            <div class="line"><div class="title"><p>カメラ</p></div><div class="koron"><p>:</p></div><div class="content"><p>OM Digital Solutions OM-1</p></div></div>
+            <div class="line"><div class="title"><p>レンズ</p></div><div class="koron"><p>:</p></div><div class="content"><p>M.ZUIKO DIGITAL ED 8-25mm F4.0 PRO</p></div></div>
+            <div class="line"><div class="title"><p>設定</p></div><div class="koron"><p>:</p></div><div class="content"><p>SS1/400 f/13 ISO 6400</p></div></div>
+            <div class="line"><div class="title"><p>コメント</p></div><div class="koron"><p>:</p></div><div class="content"><p>冬のハス田は凍てつく荒野。<br>影の世界は青かった。</p></div></div>
+          </div>
+        </div>
+        <div class="work-block">
+          <img src="https://lh3.googleusercontent.com/d/15Zmvi_ECOzw8Cc876sGW-jJdhIg4bIqR" alt="青葉のプロムナード">
+          <div class="huruta-content">
+            <div class="line"><div class="title"><p>タイトル</p></div><div class="koron"><p>:</p></div><div class="content"><p>青葉のプロムナード</p></div></div>
+            <div class="line"><div class="title"><p>撮影地</p></div><div class="koron"><p>:</p></div><div class="content"><p>成田市さくらの山</p></div></div>
+            <div class="line"><div class="title"><p>カメラ</p></div><div class="koron"><p>:</p></div><div class="content"><p>OM Digital Solutions OM-1</p></div></div>
+            <div class="line"><div class="title"><p>レンズ</p></div><div class="koron"><p>:</p></div><div class="content"><p>M.ZUIKO DIGITAL ED 12-40mm F2.8 PRO II</p></div></div>
+            <div class="line"><div class="title"><p>設定</p></div><div class="koron"><p>:</p></div><div class="content"><p>SS1/1250 f/2.8 ISO 200</p></div></div>
+            <div class="line"><div class="title"><p>コメント</p></div><div class="koron"><p>:</p></div><div class="content"><p>小径の先にはトトロがいそう。<br>そんな夢の世界に出会えた。</p></div></div>
+          </div>
+        </div>
+  </div>
+  <div class="main visible">
+    <div class="target" id="target6"></div>
+    <h1>洲家 岳人</h1>
+        <div class="work-block">
+          <img src="https://lh3.googleusercontent.com/d/1byfBX2INWjPiw1pzEuZmFsVsBIHiHppN" alt="家族日和、空と海のあいだで">
+          <div class="huruta-content">
+            <div class="line"><div class="title"><p>タイトル</p></div><div class="koron"><p>:</p></div><div class="content"><p>家族日和、空と海のあいだで</p></div></div>
+            <div class="line"><div class="title"><p>撮影地</p></div><div class="koron"><p>:</p></div><div class="content"><p>羽田空港</p></div></div>
+            <div class="line"><div class="title"><p>カメラ</p></div><div class="koron"><p>:</p></div><div class="content"><p>EOS R5</p></div></div>
+            <div class="line"><div class="title"><p>レンズ</p></div><div class="koron"><p>:</p></div><div class="content"><p>RF70-200mm F2.8 L IS USM</p></div></div>
+            <div class="line"><div class="title"><p>設定</p></div><div class="koron"><p>:</p></div><div class="content"><p>SS1/3200 f/8.0 ISO 800</p></div></div>
+            <div class="line"><div class="title"><p>コメント</p></div><div class="koron"><p>:</p></div><div class="content"><p>親は願い　子は憧れを<br>それぞれの青写真。</p></div></div>
+          </div>
+        </div>
+  </div>
+  <div class="main visible">
+    <div class="target" id="target7"></div>
+    <h1>深谷 美和子</h1>
+        <div class="work-block">
+          <img src="https://lh3.googleusercontent.com/d/1a1L_xjJpJJz2JFAZemvWo2B7CotHVj5U" alt="青々と">
+          <div class="huruta-content">
+            <div class="line"><div class="title"><p>タイトル</p></div><div class="koron"><p>:</p></div><div class="content"><p>青々と</p></div></div>
+            <div class="line"><div class="title"><p>撮影地</p></div><div class="koron"><p>:</p></div><div class="content"><p>札幌丘珠空港</p></div></div>
+            <div class="line"><div class="title"><p>カメラ</p></div><div class="koron"><p>:</p></div><div class="content"><p>Nikon Z9</p></div></div>
+            <div class="line"><div class="title"><p>レンズ</p></div><div class="koron"><p>:</p></div><div class="content"><p>NIKKOR Z 24-120mm f/4 S</p></div></div>
+            <div class="line"><div class="title"><p>設定</p></div><div class="koron"><p>:</p></div><div class="content"><p>SS1/2000 f/22 ISO 2500</p></div></div>
+            <div class="line"><div class="title"><p>コメント</p></div><div class="koron"><p>:</p></div><div class="content"><p>札幌丘珠空港の滑走路北側には今でも玉ねぎ畑が広がっています。<br>大きく青々と育った玉ねぎの葉が倒れると、玉ねぎは栄養を蓄えて更に育ちます。<br>そこへ着陸してきたのは静岡の茶畑をイメージしたFDAの「ティーグリーン」。<br>「あお」の共演となりました。</p></div></div>
+          </div>
+        </div>
+  </div>
+  <div class="main visible">
+    <div class="target" id="target8"></div>
+    <h1>里村 幸昭</h1>
+        <div class="work-block">
+          <img src="https://lh3.googleusercontent.com/d/1MOYGL7HCrXD8cKTbxQqz_edznEtnnJ35" alt="日常">
+          <div class="huruta-content">
+            <div class="line"><div class="title"><p>タイトル</p></div><div class="koron"><p>:</p></div><div class="content"><p>日常</p></div></div>
+            <div class="line"><div class="title"><p>撮影地</p></div><div class="koron"><p>:</p></div><div class="content"><p>西鉄桜並木駅（福岡市）</p></div></div>
+            <div class="line"><div class="title"><p>カメラ</p></div><div class="koron"><p>:</p></div><div class="content"><p>EOS R3</p></div></div>
+            <div class="line"><div class="title"><p>レンズ</p></div><div class="koron"><p>:</p></div><div class="content"><p>RF24-105mm F4 L IS USM</p></div></div>
+            <div class="line"><div class="title"><p>設定</p></div><div class="koron"><p>:</p></div><div class="content"><p>SS1/1250 f/11 ISO 1600</p></div></div>
+            <div class="line"><div class="title"><p>コメント</p></div><div class="koron"><p>:</p></div><div class="content"><p>毎日、ヒコーキが通るたびに空を見上げる。<br>もっと魅力的な風景があるはずと思い、ある日、電車を途中下車してみた。<br>駅のホームに降りた瞬間ここで撮らない理由はなかった。</p></div></div>
+          </div>
+        </div>
+  </div>
+  <div class="main visible">
+    <div class="target" id="target9"></div>
+    <h1>築島 好古</h1>
+        <div class="work-block">
+          <img src="https://lh3.googleusercontent.com/d/14ZT07_6kIwC7cvBVHMoPz8YtggYvkJ93" alt="ハワイの海に想いを馳せて">
+          <div class="huruta-content">
+            <div class="line"><div class="title"><p>タイトル</p></div><div class="koron"><p>:</p></div><div class="content"><p>ハワイの海に想いを馳せて</p></div></div>
+            <div class="line"><div class="title"><p>撮影地</p></div><div class="koron"><p>:</p></div><div class="content"><p>成田空港</p></div></div>
+            <div class="line"><div class="title"><p>カメラ</p></div><div class="koron"><p>:</p></div><div class="content"><p>EOS R6</p></div></div>
+            <div class="line"><div class="title"><p>レンズ</p></div><div class="koron"><p>:</p></div><div class="content"><p>TAMRON SP 24-70mm F/2.8 Di VC USD G2（Model A032）</p></div></div>
+            <div class="line"><div class="title"><p>設定</p></div><div class="koron"><p>:</p></div><div class="content"><p>SS1/1250 f/6.3 ISO 200</p></div></div>
+            <div class="line"><div class="title"><p>コメント</p></div><div class="koron"><p>:</p></div><div class="content"><p>成田空港の駐機場から動き出した際、ふと窓の外を見るとホノルルから帰って来たばかりのANAのA380（フライングホヌ）が翼を休めていました。<br>「ハワイの海」をイメージした2号機のJA382Aということもあり、束の間ですが南国の海を感じることができました。</p></div></div>
+          </div>
+        </div>
+  </div>
+  <div class="main visible">
+    <div class="target" id="target10"></div>
+    <h1>渡部 将大</h1>
+        <div class="work-block">
+          <img src="https://lh3.googleusercontent.com/d/1nolL46PpjWb5y2YSmAUw5aT7uC-xqUJk" alt="ジブラルタル AO">
+          <div class="huruta-content">
+            <div class="line"><div class="title"><p>タイトル</p></div><div class="koron"><p>:</p></div><div class="content"><p>ジブラルタル AO</p></div></div>
+            <div class="line"><div class="title"><p>撮影地</p></div><div class="koron"><p>:</p></div><div class="content"><p>ジブラルタル国際空港</p></div></div>
+            <div class="line"><div class="title"><p>カメラ</p></div><div class="koron"><p>:</p></div><div class="content"><p>Nikon D850</p></div></div>
+            <div class="line"><div class="title"><p>レンズ</p></div><div class="koron"><p>:</p></div><div class="content"><p>AF-S NIKKOR 70-200mm f/4G ED VR</p></div></div>
+            <div class="line"><div class="title"><p>設定</p></div><div class="koron"><p>:</p></div><div class="content"><p>SS1/1250 f/8.0 ISO 320</p></div></div>
+            <div class="line"><div class="title"><p>コメント</p></div><div class="koron"><p>:</p></div><div class="content"><p>世界にはユニークな空港が数多くある。<br>ヨットと飛行機が隣り合わせの小さな国際空港。<br>ここは地中海と大西洋の狭間 ― Gibraltar。</p></div></div>
+          </div>
+        </div>
+  </div>
+  <div class="main visible">
+    <div class="target" id="target11"></div>
+    <h1>原田 涼太郎</h1>
+        <div class="work-block">
+          <img src="https://lh3.googleusercontent.com/d/1dkhAHW-I40gcOkuGwZMOWKqdMbhk7w92" alt="見上げた先に">
+          <div class="huruta-content">
+            <div class="line"><div class="title"><p>タイトル</p></div><div class="koron"><p>:</p></div><div class="content"><p>見上げた先に</p></div></div>
+            <div class="line"><div class="title"><p>撮影地</p></div><div class="koron"><p>:</p></div><div class="content"><p>渋谷・スクランブル交差点</p></div></div>
+            <div class="line"><div class="title"><p>カメラ</p></div><div class="koron"><p>:</p></div><div class="content"><p>EOS 7D Mark II</p></div></div>
+            <div class="line"><div class="title"><p>レンズ</p></div><div class="koron"><p>:</p></div><div class="content"><p>EF-S18-135mm F3.5-5.6 IS STM</p></div></div>
+            <div class="line"><div class="title"><p>設定</p></div><div class="koron"><p>:</p></div><div class="content"><p>SS1/1250 f/7.1 ISO 250</p></div></div>
+            <div class="line"><div class="title"><p>コメント</p></div><div class="koron"><p>:</p></div><div class="content"><p>頭上を覆うようにビルが林立し、空が狭まる東京都心。<br>地元・高知の広い青空を知るからこそ、東京の青空の相対的な価値を高く感じる。<br>そんな都心の青空を、飛行機が次々に通過していく。<br>街中の喧騒の中、時間にしてわずか1,2秒ほどだが、心高まる瞬間だ。</p></div></div>
+          </div>
+        </div>
+  </div>
+  <div class="main visible">
+    <div class="target" id="target12"></div>
+    <h1>井上 昌一</h1>
+        <div class="work-block">
+          <img src="https://lh3.googleusercontent.com/d/1Qb6WwsEPvDaecTf4WepM8_VkGAQTrG0F" alt="蒼爽のTAKE OFF">
+          <div class="huruta-content">
+            <div class="line"><div class="title"><p>タイトル</p></div><div class="koron"><p>:</p></div><div class="content"><p>蒼爽のTAKE OFF</p></div></div>
+            <div class="line"><div class="title"><p>撮影地</p></div><div class="koron"><p>:</p></div><div class="content"><p>伊丹空港</p></div></div>
+            <div class="line"><div class="title"><p>カメラ</p></div><div class="koron"><p>:</p></div><div class="content"><p>EOS R5</p></div></div>
+            <div class="line"><div class="title"><p>レンズ</p></div><div class="koron"><p>:</p></div><div class="content"><p>RF14-35mm F4 L IS USM</p></div></div>
+            <div class="line"><div class="title"><p>設定</p></div><div class="koron"><p>:</p></div><div class="content"><p>SS1/1000 f/8.0 ISO 160</p></div></div>
+            <div class="line"><div class="title"><p>コメント</p></div><div class="koron"><p>:</p></div><div class="content"><p>綿雲が流れる伊丹の青空に、推しのANAスターウォーズJET（ 通称「たくあん」）を追う。<br>街中にある空港なのに、この日の空模様は草原を思わせるような清々しさ。<br>そんな特別な舞台で、離陸の瞬間を待ち構えました。</p></div></div>
+          </div>
+        </div>
+  </div>
+  <div class="main visible">
+    <div class="target" id="target13"></div>
+    <h1>島田 康司</h1>
+        <div class="work-block">
+          <img src="https://lh3.googleusercontent.com/d/1ldC8efwH6ujjdKLTu9-4665pNAKSm0nB" alt="静流">
+          <div class="huruta-content">
+            <div class="line"><div class="title"><p>タイトル</p></div><div class="koron"><p>:</p></div><div class="content"><p>静流</p></div></div>
+            <div class="line"><div class="title"><p>撮影地</p></div><div class="koron"><p>:</p></div><div class="content"><p>羽田空港</p></div></div>
+            <div class="line"><div class="title"><p>カメラ</p></div><div class="koron"><p>:</p></div><div class="content"><p>EOS R6</p></div></div>
+            <div class="line"><div class="title"><p>レンズ</p></div><div class="koron"><p>:</p></div><div class="content"><p>EF70-200mm F2.8L IS II USM</p></div></div>
+            <div class="line"><div class="title"><p>設定</p></div><div class="koron"><p>:</p></div><div class="content"><p>SS1/4 f/2.8 ISO 200</p></div></div>
+            <div class="line"><div class="title"><p>コメント</p></div><div class="koron"><p>:</p></div><div class="content"><p>「彗星流し」という撮影方法で、静かに流れる「静流」を思い起こすような1枚が撮れました。</p></div></div>
+          </div>
+        </div>
+        <div class="work-block">
+          <img src="https://lh3.googleusercontent.com/d/1_zjJTXKk65YyhU40uZ2d6ZntPCj4ANbM" alt="水中夏(すいちゅうか)">
+          <div class="huruta-content">
+            <div class="line"><div class="title"><p>タイトル</p></div><div class="koron"><p>:</p></div><div class="content"><p>水中夏(すいちゅうか)</p></div></div>
+            <div class="line"><div class="title"><p>撮影地</p></div><div class="koron"><p>:</p></div><div class="content"><p>下地島空港</p></div></div>
+            <div class="line"><div class="title"><p>カメラ</p></div><div class="koron"><p>:</p></div><div class="content"><p>EOS R6</p></div></div>
+            <div class="line"><div class="title"><p>レンズ</p></div><div class="koron"><p>:</p></div><div class="content"><p>RF15-35mm F2.8 L IS USM</p></div></div>
+            <div class="line"><div class="title"><p>設定</p></div><div class="koron"><p>:</p></div><div class="content"><p>SS1/2500 f/4.0 ISO 125</p></div></div>
+            <div class="line"><div class="title"><p>コメント</p></div><div class="koron"><p>:</p></div><div class="content"><p>もし自分が水中の花ならば…<br>こんな感じで飛行機を愛でているであろう。<br>と想った夏。</p></div></div>
+          </div>
+        </div>
+  </div>
+  <div class="main visible">
+    <div class="target" id="target14"></div>
+    <h1>後藤 大輝</h1>
+        <div class="work-block">
+          <img src="https://lh3.googleusercontent.com/d/1cZfeHyKFEipowDu6XQ0BFjrcVn3JlnCy" alt="Blue Silence">
+          <div class="huruta-content">
+            <div class="line"><div class="title"><p>タイトル</p></div><div class="koron"><p>:</p></div><div class="content"><p>Blue Silence</p></div></div>
+            <div class="line"><div class="title"><p>撮影地</p></div><div class="koron"><p>:</p></div><div class="content"><p>羽田空港</p></div></div>
+            <div class="line"><div class="title"><p>カメラ</p></div><div class="koron"><p>:</p></div><div class="content"><p>EOS R5</p></div></div>
+            <div class="line"><div class="title"><p>レンズ</p></div><div class="koron"><p>:</p></div><div class="content"><p>RF100-300mm F2.8 L IS USM</p></div></div>
+            <div class="line"><div class="title"><p>設定</p></div><div class="koron"><p>:</p></div><div class="content"><p>SS1/13 f/2.8 ISO 1000</p></div></div>
+            <div class="line"><div class="title"><p>コメント</p></div><div class="koron"><p>:</p></div><div class="content"><p>RWY22へアプローチするANA A320。<br>最近のランディングライトはLEDも増え、青い光を放つ光跡が印象的でした。</p></div></div>
+          </div>
+        </div>
+        <div class="work-block">
+          <img src="https://lh3.googleusercontent.com/d/1qSzdUvFxPRAbMkzJwSFG4s8F1n7piH_7" alt="蒼光の向こうへ">
+          <div class="huruta-content">
+            <div class="line"><div class="title"><p>タイトル</p></div><div class="koron"><p>:</p></div><div class="content"><p>蒼光の向こうへ</p></div></div>
+            <div class="line"><div class="title"><p>撮影地</p></div><div class="koron"><p>:</p></div><div class="content"><p>羽田空港</p></div></div>
+            <div class="line"><div class="title"><p>カメラ</p></div><div class="koron"><p>:</p></div><div class="content"><p>EOS R5</p></div></div>
+            <div class="line"><div class="title"><p>レンズ</p></div><div class="koron"><p>:</p></div><div class="content"><p>RF100-300mm F2.8 L IS USM</p></div></div>
+            <div class="line"><div class="title"><p>設定</p></div><div class="koron"><p>:</p></div><div class="content"><p>SS0.5秒 f/5.6 ISO 2000</p></div></div>
+            <div class="line"><div class="title"><p>コメント</p></div><div class="koron"><p>:</p></div><div class="content"><p>私の中で「Ao」と言えば青いANAの飛行機。<br>ファインダーの中を全てANAの機体にしたいと思い、ソラムナード緑地から狙った。<br>奥は第2ターミナル国際線エリア、眩い光を放ちながら着陸機を待っているB787、そして着陸して来たB777の流れる垂直尾翼。<br>蒼い光が魅せる最高の夜だった。</p></div></div>
+          </div>
+        </div>
+  </div>
+  <div class="main visible">
+    <div class="target" id="target15"></div>
+    <h1>岡田 雅典</h1>
+        <div class="work-block">
+          <img src="https://lh3.googleusercontent.com/d/1fXPNAfYXPhCH2Bjvy1zDR5VDI8AB4VTA" alt="TOKYO BLUE SKY">
+          <div class="huruta-content">
+            <div class="line"><div class="title"><p>タイトル</p></div><div class="koron"><p>:</p></div><div class="content"><p>TOKYO BLUE SKY</p></div></div>
+            <div class="line"><div class="title"><p>撮影地</p></div><div class="koron"><p>:</p></div><div class="content"><p>東京ゲートブリッジ</p></div></div>
+            <div class="line"><div class="title"><p>カメラ</p></div><div class="koron"><p>:</p></div><div class="content"><p>EOS R6</p></div></div>
+            <div class="line"><div class="title"><p>レンズ</p></div><div class="koron"><p>:</p></div><div class="content"><p>RF24-105mm F4 L IS USM</p></div></div>
+            <div class="line"><div class="title"><p>設定</p></div><div class="koron"><p>:</p></div><div class="content"><p>SS1/1600 f/8.0 ISO 320</p></div></div>
+            <div class="line"><div class="title"><p>コメント</p></div><div class="koron"><p>:</p></div><div class="content"><p>真冬の青空が嬉しい日は、東京のランドマークが見渡せる場所でヒコーキを待った。<br>ここで狙うは欧米便。<br>離陸滑走距離が長い便でなければこうして撮ることができないからだ。<br>イギリスはロンドンヒースロー空港へと向かうJALの43便が狙いの位置にやってきた。<br>一期一会、そんな瞬間に心躍らせることができた。</p></div></div>
+          </div>
+        </div>
+  </div>
+  <div class="main visible">
+    <div class="target" id="target16"></div>
+    <h1>松尾 省吾</h1>
+        <div class="work-block">
+          <img src="https://lh3.googleusercontent.com/d/1qwhw0pFYXOoeZ1H_ll6LgieOgjIqUR9p" alt="星空コントレイル">
+          <div class="huruta-content">
+            <div class="line"><div class="title"><p>タイトル</p></div><div class="koron"><p>:</p></div><div class="content"><p>星空コントレイル</p></div></div>
+            <div class="line"><div class="title"><p>撮影地</p></div><div class="koron"><p>:</p></div><div class="content"><p>富山空港</p></div></div>
+            <div class="line"><div class="title"><p>カメラ</p></div><div class="koron"><p>:</p></div><div class="content"><p>EOS R6 Mark II</p></div></div>
+            <div class="line"><div class="title"><p>レンズ</p></div><div class="koron"><p>:</p></div><div class="content"><p>EF35mm F1.4L II USM</p></div></div>
+            <div class="line"><div class="title"><p>設定</p></div><div class="koron"><p>:</p></div><div class="content"><p>SS30秒 f/6.3 ISO 200　比較明合成</p></div></div>
+            <div class="line"><div class="title"><p>コメント</p></div><div class="koron"><p>:</p></div><div class="content"><p>ヒコーキと星空の作品を撮りたいという＂願い＂を叶えてくれた場所。</p></div></div>
+          </div>
+        </div>
+  </div>
+  <div class="main visible">
+    <div class="target" id="target17"></div>
+    <h1>作村 俊弘</h1>
+        <div class="work-block">
+          <img src="https://lh3.googleusercontent.com/d/1ajxi7EqqNGempR3ZDfdFbmHiFt8Z_js5" alt="琉球のおえかき">
+          <div class="huruta-content">
+            <div class="line"><div class="title"><p>タイトル</p></div><div class="koron"><p>:</p></div><div class="content"><p>琉球のおえかき</p></div></div>
+            <div class="line"><div class="title"><p>撮影地</p></div><div class="koron"><p>:</p></div><div class="content"><p>那覇空港</p></div></div>
+            <div class="line"><div class="title"><p>カメラ</p></div><div class="koron"><p>:</p></div><div class="content"><p>EOS R3</p></div></div>
+            <div class="line"><div class="title"><p>レンズ</p></div><div class="koron"><p>:</p></div><div class="content"><p>RF24-105mm F4 L IS USM</p></div></div>
+            <div class="line"><div class="title"><p>設定</p></div><div class="koron"><p>:</p></div><div class="content"><p>SS1/1600 f/5.0 ISO 250</p></div></div>
+            <div class="line"><div class="title"><p>コメント</p></div><div class="koron"><p>:</p></div><div class="content"><p>今回のテーマが決まって真っ先に思い描いた撮影場所は、沖縄県の那覇空港でした。<br>青い海と空と言えばの代名詞的な場所です。<br>琉球（りゅうきゅう）の青い空に雲でお絵かきをしたかの様な空を求めて撮影しました。</p></div></div>
+          </div>
+        </div>
+  </div>
+  <div class="main visible">
+    <div class="target" id="target18"></div>
+    <h1>木村 紀雄</h1>
+        <div class="work-block">
+          <img src="https://lh3.googleusercontent.com/d/1ekYMb_D5gvRD-VD1mf4tGnl_ib5Uy2aN" alt="OSAKA Blue Hour">
+          <div class="huruta-content">
+            <div class="line"><div class="title"><p>タイトル</p></div><div class="koron"><p>:</p></div><div class="content"><p>OSAKA Blue Hour</p></div></div>
+            <div class="line"><div class="title"><p>撮影地</p></div><div class="koron"><p>:</p></div><div class="content"><p>大阪府上空</p></div></div>
+            <div class="line"><div class="title"><p>カメラ</p></div><div class="koron"><p>:</p></div><div class="content"><p>EOS R3</p></div></div>
+            <div class="line"><div class="title"><p>レンズ</p></div><div class="koron"><p>:</p></div><div class="content"><p>RF24-105mm F4 L IS USM</p></div></div>
+            <div class="line"><div class="title"><p>設定</p></div><div class="koron"><p>:</p></div><div class="content"><p>SS1/160 f/4.0 ISO 20000</p></div></div>
+            <div class="line"><div class="title"><p>コメント</p></div><div class="koron"><p>:</p></div><div class="content"><p>関西国際空港を離陸後、大阪湾を一周して高度を稼いでから大阪南部を通過して羽田空港へと向かう。<br>大阪を満喫した後に見れるこの景色が堪らない。<br>日没後のブルーアワーを狙って搭乗する飛行機を選んだ。</p></div></div>
+          </div>
+        </div>
+        <div class="work-block">
+          <img src="https://lh3.googleusercontent.com/d/1Odr1z6xYQscGULzKSDM4BOgcwdy5OFWf" alt="To:てぃんがーら">
+          <div class="huruta-content">
+            <div class="line"><div class="title"><p>タイトル</p></div><div class="koron"><p>:</p></div><div class="content"><p>To:てぃんがーら</p></div></div>
+            <div class="line"><div class="title"><p>撮影地</p></div><div class="koron"><p>:</p></div><div class="content"><p>石垣空港</p></div></div>
+            <div class="line"><div class="title"><p>カメラ</p></div><div class="koron"><p>:</p></div><div class="content"><p>EOS R5</p></div></div>
+            <div class="line"><div class="title"><p>レンズ</p></div><div class="koron"><p>:</p></div><div class="content"><p>RF15-35mm F2.8 L IS USM</p></div></div>
+            <div class="line"><div class="title"><p>設定</p></div><div class="koron"><p>:</p></div><div class="content"><p>SS15秒 f/3.5 ISO 2000</p></div></div>
+            <div class="line"><div class="title"><p>コメント</p></div><div class="koron"><p>:</p></div><div class="content"><p>石垣空港の特徴的な空港施設、誘導灯橋越しに天の川を撮影。<br>南の島から天の川銀河に飛び立つイメージで撮影しました。<br>てぃんがーらとは沖縄方言で天の川を意味します。</p></div></div>
+          </div>
+        </div>
+  </div>
+  <div class="main visible">
+    <div class="target" id="target19"></div>
+    <h1>古田 佑一</h1>
+        <div class="work-block">
+          <img src="https://lh3.googleusercontent.com/d/11fhpl9JEO0IkY8odvULpw2rV-y5OmT_v" alt="こんにちは 2025">
+          <div class="huruta-content">
+            <div class="line"><div class="title"><p>タイトル</p></div><div class="koron"><p>:</p></div><div class="content"><p>こんにちは 2025</p></div></div>
+            <div class="line"><div class="title"><p>撮影地</p></div><div class="koron"><p>:</p></div><div class="content"><p>大阪城公園（大阪市）</p></div></div>
+            <div class="line"><div class="title"><p>カメラ</p></div><div class="koron"><p>:</p></div><div class="content"><p>EOS R5</p></div></div>
+            <div class="line"><div class="title"><p>レンズ</p></div><div class="koron"><p>:</p></div><div class="content"><p>EF24-70mm F4L IS USM</p></div></div>
+            <div class="line"><div class="title"><p>設定</p></div><div class="koron"><p>:</p></div><div class="content"><p>SS1/250 f/16 ISO 800</p></div></div>
+            <div class="line"><div class="title"><p>コメント</p></div><div class="koron"><p>:</p></div><div class="content"><p>こんにちは　桜咲く　こんにちは　幕が開く<br>こんにちは　海を超え　この命は　響き合う<br>こんにちは　桜舞う　この地球（ほし）は　生きている<br>― EXPO2025 テーマソング　コブクロ『この地球の続きを』より</p></div></div>
+          </div>
+        </div>
+        <div class="work-block">
+          <img src="https://lh3.googleusercontent.com/d/1eORAOUU2ZucWIMA9TkZqybcPtFFPX4cx" alt="Ao">
+          <div class="huruta-content">
+            <div class="line"><div class="title"><p>タイトル</p></div><div class="koron"><p>:</p></div><div class="content"><p>Ao</p></div></div>
+            <div class="line"><div class="title"><p>撮影地</p></div><div class="koron"><p>:</p></div><div class="content"><p>伊丹空港</p></div></div>
+            <div class="line"><div class="title"><p>カメラ</p></div><div class="koron"><p>:</p></div><div class="content"><p>EOS 5D Mark IV</p></div></div>
+            <div class="line"><div class="title"><p>レンズ</p></div><div class="koron"><p>:</p></div><div class="content"><p>EF16-35mm F4L IS USM</p></div></div>
+            <div class="line"><div class="title"><p>設定</p></div><div class="koron"><p>:</p></div><div class="content"><p>SS1/2000 f/5.0 ISO 3200</p></div></div>
+            <div class="line"><div class="title"><p>コメント</p></div><div class="koron"><p>:</p></div><div class="content"><p>梅雨の夕暮れ、蒼の空が広がった。<br>ひとときの静寂に787が響かせる。<br>静と動と蒼の共演だ。</p></div></div>
+          </div>
+        </div>
+  </div>
+
+  <div class="archive-tabs">
+    <a href="https://hikosha.github.io/hikosha1/" target="_blank"><span class="sub">第1回</span><span class="main-label">FIRST TAKE OFF</span></a>
+    <a href="https://hikosha.github.io/hikosha3/" target="_blank"><span class="sub">第3回</span><span class="main-label">オレンジ&ゴールド</span></a>
+  </div>
+
+  <footer>
+    <div class="logo-row">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+        <img src="https://lh3.googleusercontent.com/d/1e6NpaSy033tUjvPqyqAM2FtvvW4IxgXl" alt="ロゴ">
+      </div>
+  </footer>
+
+  <button id="topBtn" aria-label="上に戻る">↑</button>
+
+  <script>
+    document.querySelectorAll('.jump-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        const targetId = btn.getAttribute('data-target');
+        const el = document.getElementById(targetId);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    const mainDivs = document.querySelectorAll('.main');
+    const topBtn = document.getElementById('topBtn');
+
+    const checkVisibility = () => {
+      const vh = window.innerHeight;
+      mainDivs.forEach(function(div) {
+        const rect = div.getBoundingClientRect();
+        if (rect.top < vh * 0.85) {
+          div.classList.add('visible');
+        }
+      });
+      if (window.scrollY > vh * 0.5) {
+        topBtn.classList.add('show');
+      } else {
+        topBtn.classList.remove('show');
+      }
+    };
+    window.addEventListener('scroll', checkVisibility);
+    window.addEventListener('resize', checkVisibility);
+    checkVisibility();
+
+    topBtn.addEventListener('click', function() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>
